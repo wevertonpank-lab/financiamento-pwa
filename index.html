@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <title>Simulação de Financiamento</title>
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#1976d2">
+
+  <link rel="manifest" href="manifest.json">
+  <link rel="icon" href="icon-192.png">
+
+  <style>
+    body { font-family: Arial; background: #f2f2f2; padding: 20px; }
+    h2 { text-align: center; }
+    input, select, button {
+      width: 100%;
+      padding: 10px;
+      margin-top: 10px;
+      font-size: 16px;
+    }
+    button {
+      background: #1976d2;
+      color: white;
+      border: none;
+      cursor: pointer;
+    }
+    .resultado {
+      margin-top: 20px;
+      background: #fff;
+      padding: 15px;
+      border-radius: 5px;
+    }
+  </style>
+</head>
+
+<body>
+
+<h2>Simulação de Financiamento</h2>
+
+<input type="number" id="valorProduto" placeholder="Valor do produto">
+
+<input type="number" id="valorServico" placeholder="Garantia / Serviços (opcional)">
+
+<input type="number" id="entrada" placeholder="Entrada (opcional)">
+
+<select id="parcelas">
+  <option value="">Selecione as parcelas</option>
+  <option value="1">1x</option>
+  <option value="2">2x</option>
+  <option value="3">3x</option>
+  <option value="4">4x</option>
+  <option value="5">5x</option>
+  <option value="6">6x</option>
+  <option value="7">7x</option>
+  <option value="8">8x</option>
+  <option value="9">9x</option>
+  <option value="10">10x</option>
+  <option value="11">11x</option>
+  <option value="12">12x</option>
+  <option value="13">13x</option>
+  <option value="14">14x</option>
+  <option value="15">15x</option>
+</select>
+
+<button onclick="calcular()">Calcular</button>
+
+<div class="resultado" id="resultado"></div>
+
+<script>
+const coeficientes = {
+  1:1.1190,2:0.5909,3:0.4156,4:0.3285,5:0.2767,
+  6:0.2425,7:0.2184,8:0.2006,9:0.1870,
+  10:0.1763,11:0.1677,12:0.1607,
+  13:0.1549,14:0.1501,15:0.1460
+};
+
+function calcular() {
+  const produto = Number(valorProduto.value) || 0;
+  const servico = Number(valorServico.value) || 0;
+  const entradaValor = Number(entrada.value) || 0;
+  const parcelas = parcelasSelect.value = parcelas.value;
+
+  if (!parcelas) {
+    alert("Selecione o parcelamento");
+    return;
+  }
+
+  const valorFinanciado = produto + servico - entradaValor;
+  const coef = coeficientes[parcelas];
+  const parcela = valorFinanciado * coef;
+  const total = parcela * parcelas;
+
+  resultado.innerHTML = `
+    <strong>Valor financiado:</strong> R$ ${valorFinanciado.toFixed(2)}<br>
+    <strong>Parcelamento:</strong> ${parcelas}x<br>
+    <strong>Valor da parcela:</strong> R$ ${parcela.toFixed(2)}<br>
+    <strong>Valor total:</strong> R$ ${total.toFixed(2)}
+  `;
+}
+</script>
+
+<script>
+if ('serviceWorker' in navigator) {
+  navigator.serviceWorker.register('service-worker.js');
+}
+</script>
+
+</body>
+</html>
