@@ -11,7 +11,11 @@
   <link rel="icon" href="icon-192.png">
 
   <style>
-    body { font-family: Arial; background: #f2f2f2; padding: 20px; }
+    body {
+      font-family: Arial, sans-serif;
+      background: #f2f2f2;
+      padding: 20px;
+    }
     h2 { text-align: center; }
     input, select, button {
       width: 100%;
@@ -39,9 +43,7 @@
 <h2>Simulação de Financiamento</h2>
 
 <input type="number" id="valorProduto" placeholder="Valor do produto">
-
 <input type="number" id="valorServico" placeholder="Garantia / Serviços (opcional)">
-
 <input type="number" id="entrada" placeholder="Entrada (opcional)">
 
 <select id="parcelas">
@@ -69,32 +71,37 @@
 
 <script>
 const coeficientes = {
-  1:1.1190,2:0.5909,3:0.4156,4:0.3285,5:0.2767,
-  6:0.2425,7:0.2184,8:0.2006,9:0.1870,
-  10:0.1763,11:0.1677,12:0.1607,
-  13:0.1549,14:0.1501,15:0.1460
+  1:1.1190, 2:0.5909, 3:0.4156, 4:0.3285, 5:0.2767,
+  6:0.2425, 7:0.2184, 8:0.2006, 9:0.1870,
+  10:0.1763, 11:0.1677, 12:0.1607,
+  13:0.1549, 14:0.1501, 15:0.1460
 };
 
 function calcular() {
-  const produto = Number(valorProduto.value) || 0;
-  const servico = Number(valorServico.value) || 0;
-  const entradaValor = Number(entrada.value) || 0;
-  const parcelas = parcelasSelect.value = parcelas.value;
+  const produto = parseFloat(document.getElementById("valorProduto").value) || 0;
+  const servico = parseFloat(document.getElementById("valorServico").value) || 0;
+  const entrada = parseFloat(document.getElementById("entrada").value) || 0;
+  const parcelas = parseInt(document.getElementById("parcelas").value);
 
-  if (!parcelas) {
+  if (isNaN(parcelas)) {
     alert("Selecione o parcelamento");
     return;
   }
 
-  const valorFinanciado = produto + servico - entradaValor;
-  const coef = coeficientes[parcelas];
-  const parcela = valorFinanciado * coef;
-  const total = parcela * parcelas;
+  const valorFinanciado = produto + servico - entrada;
 
-  resultado.innerHTML = `
+  if (valorFinanciado <= 0) {
+    alert("Valor financiado inválido");
+    return;
+  }
+
+  const valorParcela = valorFinanciado * coeficientes[parcelas];
+  const total = valorParcela * parcelas;
+
+  document.getElementById("resultado").innerHTML = `
     <strong>Valor financiado:</strong> R$ ${valorFinanciado.toFixed(2)}<br>
     <strong>Parcelamento:</strong> ${parcelas}x<br>
-    <strong>Valor da parcela:</strong> R$ ${parcela.toFixed(2)}<br>
+    <strong>Valor da parcela:</strong> R$ ${valorParcela.toFixed(2)}<br>
     <strong>Valor total:</strong> R$ ${total.toFixed(2)}
   `;
 }
@@ -102,7 +109,7 @@ function calcular() {
 
 <script>
 if ('serviceWorker' in navigator) {
-  navigator.serviceWorker.register('service-worker.js');
+  navigator.serviceWorker.register('/financiamento-pwa/service-worker.js');
 }
 </script>
 

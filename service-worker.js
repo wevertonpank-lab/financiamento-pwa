@@ -1,9 +1,14 @@
+const CACHE_NAME = 'financiamento-v2';
+
 self.addEventListener('install', event => {
   event.waitUntil(
-    caches.open('financiamento-v1').then(cache => {
+    caches.open(CACHE_NAME).then(cache => {
       return cache.addAll([
-        'index.html',
-        'manifest.json'
+        '/financiamento-pwa/',
+        '/financiamento-pwa/index.html',
+        '/financiamento-pwa/manifest.json',
+        '/financiamento-pwa/icon-192.png',
+        '/financiamento-pwa/icon-512.png'
       ]);
     })
   );

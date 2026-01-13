@@ -1,7 +1,8 @@
 {
   "name": "Simulador de Financiamento",
   "short_name": "Financiamento",
-  "start_url": "index.html",
+  "start_url": "/financiamento-pwa/index.html",
+  "scope": "/financiamento-pwa/",
   "display": "standalone",
   "background_color": "#ffffff",
   "theme_color": "#1976d2",
@@ -18,3 +19,4 @@
     }
   ]
 }
+
